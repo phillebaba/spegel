@@ -52,10 +52,11 @@ jobs:
           build-args: |
             REVISION=${{ steps.prep.outputs.REVISION }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64
-          tags: ghcr.io/xenitab/spegel:${{ steps.prep.outputs.VERSION }}
+          tags: ghcr.io/phillebaba/spegel:${{ steps.prep.outputs.VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Publish Helm chart to GHCR
         run: |
+          yq -i '.image.digest = "${{ steps.build.outputs.DIGEST }}"' charts/spegel/values.yaml
           helm package --app-version ${{ steps.prep.outputs.VERSION }} --version ${{ steps.prep.outputs.VERSION }} charts/spegel
           helm push spegel-${{ steps.prep.outputs.VERSION }}.tgz oci://ghcr.io/phillebaba/helm-charts
           rm spegel-${{ steps.prep.outputs.VERSION }}.tgz
