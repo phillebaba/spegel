@@ -52,7 +52,7 @@ jobs:
           build-args: |
             REVISION=${{ steps.prep.outputs.REVISION }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64
-          tags: ghcr.io/xenitab/spegel:${{ steps.get_tag.outputs.tag }}
+          tags: ghcr.io/xenitab/spegel:${{ steps.prep.outputs.VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Publish Helm chart to GHCR
         run: |
