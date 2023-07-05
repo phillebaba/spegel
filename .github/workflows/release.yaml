@@ -16,7 +16,7 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
-          version: v3.10.3
+          version: v3.12.1
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
       - name: Setup Docker Buildx
@@ -37,17 +37,13 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF/refs\/tags\//}
           fi
-          echo "BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
-          echo "REVISION=${GITHUB_SHA}" >> $GITHUB_OUTPUT
       - name: Generate images meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: |
-            ghcr.io/phillebaba/spegel
-          tags: |
-            type=raw,value=${{ steps.prep.outputs.VERSION }}
+          images: ghcr.io/phillebaba/spegel
+          tags: type=raw,value=${{ steps.prep.outputs.VERSION }}
       - name: Publish multi-arch image
         uses: docker/build-push-action@v3
         id: build
@@ -56,8 +52,6 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./Dockerfile
-          build-args: |
-            REVISION=${{ steps.prep.outputs.REVISION }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: ghcr.io/phillebaba/spegel:${{ steps.prep.outputs.VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
