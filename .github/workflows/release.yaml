@@ -1,7 +1,12 @@
 name: release
+
 on:
   release:
     types: [published]
+
+permissions:
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
