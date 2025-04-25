@@ -8,7 +8,8 @@ lint:
 	golangci-lint run ./...
 
 docker-build:
-	docker build -t ${IMG_REF} .
+	goreleaser build --snapshot --clean --single-target --skip before
+	docker buildx build -t ${IMG_REF} .
 
 test-unit:
 	go test ./...
