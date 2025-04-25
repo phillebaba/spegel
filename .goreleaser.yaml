@@ -24,5 +24,3 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
       - none*
-changelog:
-  disable: true
