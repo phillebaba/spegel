@@ -40,13 +40,13 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF/refs\/tags\//}
           fi
-          echo "Refer to the [Changelog](https://github.com/spegel-org/spegel/blob/main/CHANGELOG.md#${VERSION//.}) for list of changes." > ${RUNNER_TEMP}/NOTES.txt
+          echo "Refer to the [Changelog](https://github.com/spegel-org/spegel/blob/main/CHANGELOG.md#${VERSION//.}) for list of changes." > ${{ runner.temp }}/NOTES.txt
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           version: '~> v2'
-          args: release --clean --release-notes ${RUNNER_TEMP}/NOTES.txt
+          args: release --clean --release-notes ${{ runner.temp }}/NOTES.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate images meta
